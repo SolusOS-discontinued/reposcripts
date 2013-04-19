@@ -13,3 +13,18 @@ to a package repository server, into its "incoming" queue.
 Once packages have hit the incoming queue, they are held for processing. You must use
 the repo-scripts here to control distribution and maintenance of the repository
 
+BinMan
+------
+BinMan is the main controlling script of the repository. It process the incoming queue,
+and moves packages into the appropriate directories.
+
+
+DeltaFise
+---------
+Delta packages will not be accepted into incoming. All delta packages are produced on
+the repository itself, allowing delta upgrades between different SolusOS releases. Using
+the traditional build-to-repo system, this would not have been possible.
+
+Authors
+-------
+The SolusOS RepoScripts are the work of Ikey Doherty <ikey@solusos.com>
