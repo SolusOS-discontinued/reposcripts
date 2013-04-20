@@ -36,6 +36,8 @@ directory. You'll need packages in the ./incoming directory to process packages
     # Reindex the repository
     binman index
     
+    # Create all deltas
+    deltafise
     
 Authors
 -------
