@@ -89,7 +89,8 @@ if __name__ == "__main__":
 	repo = BinMan ("repo.conf")
 	
 	Commands = { 'index' : ( 'index the repository', repo.index ), \
-				 'process': ('process the incoming queue', repo.process_incoming) }
+				 'process': ('process the incoming queue', repo.process_incoming), \
+				 'help': ('display this help message', print_help) }
 
 	# Check the command
 	if len(sys.argv) < 2:
@@ -102,7 +103,10 @@ if __name__ == "__main__":
 		# Store a pointer to the function in the Commands list for the keyword
 		# and execute it, saves having a lot of if/else statements
 		command = Commands[keyword][1]
-		command ()
+		if command == print_help:
+			command (Commands)
+		else:
+			command ()
 	else:
 		print "Unknown command: %s" % keyword
  		print_help (Commands)
