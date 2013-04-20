@@ -4,6 +4,8 @@ import os
 import pisi.api
 import shutil
 import sys
+from pisi.file import File
+
 
 class BinMan:
 	
@@ -44,7 +46,14 @@ class BinMan:
 				os.makedirs (path)
 			shutil.move (item, path)
 				
-				
+	def index (self, inputs, outputDir):
+		''' Pisi index '''
+		pisi.api.index(inputs,
+                       output=os.path.join(outputDir, "pisi-index.xml"),
+                       skip_sources=True,
+                       skip_signing=True,
+                       compression=File.COMPRESSION_TYPE_XZ)
+                       		
 if __name__ == "__main__":
 	repo = BinMan ()
 	# Check the command
@@ -56,7 +65,7 @@ if __name__ == "__main__":
 	if keyword == "process":
 		repo.process_incoming ("./incoming")
 	elif keyword == "index":
-		print "Not yet implemented"
+		repo.index (["./incoming"], ".")
 	else:
 		print "Unknown command"
 	
