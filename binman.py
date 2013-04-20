@@ -6,21 +6,25 @@ import shutil
 import sys
 from pisi.file import File
 
+from configobj import ConfigObj
 
 class BinMan:
-	
-	def process_incoming (self, scanDir):
+	def __init__(self, configFile):
+		self.config = ConfigObj (configFile)
+		self.incoming_dir = self.config ["Repository"]["Incoming"]
+		
+	def process_incoming (self):
 		''' Process all packages in the scanDir and organise them properly '''
-		if not os.path.exists (scanDir):
-			print "Directory not found: %s" % scanDir
+		if not os.path.exists (self.incoming_dir):
+			print "Directory not found: %s" % self.incoming_dir
 			sys.exit (1)
 
 		searchList = list()
 		print "Scanning current working directory for .pisi files"
 					
-		for potential in os.listdir (scanDir):
+		for potential in os.listdir (self.incoming_dir):
 			if potential.endswith (".pisi") and not potential.endswith (".delta.pisi"):
-				fPath = os.path.join (scanDir, potential)
+				fPath = os.path.join (self.incoming_dir, potential)
 				searchList.append (fPath)
 				
 		total = len(searchList)
@@ -56,7 +60,7 @@ class BinMan:
                        compression=File.COMPRESSION_TYPE_XZ)
                        		
 if __name__ == "__main__":
-	repo = BinMan ()
+	repo = BinMan ("repo.conf")
 	# Check the command
 	if len(sys.argv) < 2:
 		print "Please specify a command"
@@ -64,7 +68,7 @@ if __name__ == "__main__":
 	
 	keyword = sys.argv[1]
 	if keyword == "process":
-		repo.process_incoming ("./incoming")
+		repo.process_incoming ()
 	elif keyword == "index":
 		repo.index (["."], ".")
 	else:
