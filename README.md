@@ -25,6 +25,18 @@ Delta packages will not be accepted into incoming. All delta packages are produc
 the repository itself, allowing delta upgrades between different SolusOS releases. Using
 the traditional build-to-repo system, this would not have been possible.
 
+Usage
+-----
+Create your repo.conf, based on the data/repo.conf example, and run binman from the same
+directory. You'll need packages in the ./incoming directory to process packages
+
+    # Process the incoming queue
+    binman process
+    
+    # Reindex the repository
+    binman index
+    
+    
 Authors
 -------
 The SolusOS RepoScripts are the work of Ikey Doherty <ikey@solusos.com>
