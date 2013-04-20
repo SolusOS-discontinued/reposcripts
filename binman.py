@@ -47,4 +47,11 @@ class BinMan:
 				
 if __name__ == "__main__":
 	repo = BinMan ()
-	repo.process_incoming ("./incoming")
+	# Check the command
+	if len(sys.argv) < 2:
+		print "Please specify a command"
+		sys.exit (1)
+	
+	keyword = sys.argv[1]
+	if keyword == "process":
+		repo.process_incoming ("./incoming")
