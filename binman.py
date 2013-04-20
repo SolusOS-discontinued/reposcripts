@@ -60,8 +60,10 @@ class BinMan:
                        skip_sources=True,
                        skip_signing=True,
                        compression=self.index_compression)
-
-
+                       
+	def not_implemented (self):
+		print "Not yet implemented"
+		
 def print_help (commands):
 		print "Commands:"
 		longest_name = 0
@@ -90,7 +92,8 @@ if __name__ == "__main__":
 	
 	Commands = { 'index' : ( 'index the repository', repo.index ), \
 				 'process': ('process the incoming queue', repo.process_incoming), \
-				 'help': ('display this help message', print_help) }
+				 'help': ('display this help message', print_help), 
+				 'delta': ('create deltas for the repository', repo.not_implemented) }
 
 	# Check the command
 	if len(sys.argv) < 2:
