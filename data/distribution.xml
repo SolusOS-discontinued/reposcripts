@@ -1,0 +1,15 @@
+<PISI>
+	<SourceName>SolusOS</SourceName>
+	<Version>2</Version>
+	<Description xml:lang="en">Official SolusOS Repository</Description>
+	<Type>main</Type>
+	<BinaryName>SolusOS</BinaryName>
+	
+	<Obsoletes>
+		<!-- Replaced by libpcre -->
+		<Package>pcre</Package>
+		<!-- Replaced by libpcre-devel -->
+		<Package>pcre-devel</Package>
+	</Obsoletes>
+	
+</PISI>
