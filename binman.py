@@ -7,7 +7,8 @@ import sys
 
 class BinMan:
 	
-	def __init__(self, scanDir):	
+	def process_incoming (self, scanDir):
+		''' Process all packages in the scanDir and organise them properly '''
 		if not os.path.exists (scanDir):
 			print "Directory not found: %s" % scanDir
 			sys.exit (1)
@@ -45,4 +46,5 @@ class BinMan:
 				
 				
 if __name__ == "__main__":
-	BinMan ("./incoming")
+	repo = BinMan ()
+	repo.process_incoming ("./incoming")
