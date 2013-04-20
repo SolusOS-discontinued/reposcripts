@@ -12,6 +12,8 @@ class BinMan:
 	def __init__(self, configFile):
 		self.config = ConfigObj (configFile)
 		self.incoming_dir = self.config ["Repository"]["Incoming"]
+		comp_type = self.config ["Repository"]["IndexCompression"]
+		self.index_compression = File.COMPRESSION_TYPE_XZ if comp_type == "xz" else File.COMPRESSION_TYPE_BZ2
 		
 	def process_incoming (self):
 		''' Process all packages in the scanDir and organise them properly '''
@@ -57,9 +59,13 @@ class BinMan:
                        output=os.path.join(outputDir, "pisi-index.xml"),
                        skip_sources=True,
                        skip_signing=True,
-                       compression=File.COMPRESSION_TYPE_XZ)
+                       compression=self.index_compression)
                        		
 if __name__ == "__main__":
+	if not os.path.exists ("repo.conf"):
+		print "Please use from a valid repository"
+		sys.exit (1)
+		
 	repo = BinMan ("repo.conf")
 	# Check the command
 	if len(sys.argv) < 2:
