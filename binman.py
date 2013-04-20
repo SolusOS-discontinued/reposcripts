@@ -55,3 +55,8 @@ if __name__ == "__main__":
 	keyword = sys.argv[1]
 	if keyword == "process":
 		repo.process_incoming ("./incoming")
+	elif keyword == "index":
+		print "Not yet implemented"
+	else:
+		print "Unknown command"
+	
