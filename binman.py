@@ -3,13 +3,19 @@
 import os
 import pisi.api
 import shutil
+import sys
 
 class BinMan:
 	
-	def __init__(self):
+	def __init__(self, scanDir):
 		searchList = list()
 		print "Scanning current working directory for .pisi files"
-		for potential in os.listdir ("."):
+		
+		if not os.path.exists (scanDir):
+			print "Directory not found: %s" % scanDir
+			sys.exit (1)
+			
+		for potential in os.listdir (scanDir):
 			if potential.endswith (".pisi") and not potential.endswith (".delta.pisi"):
 				searchList.append (potential)
 				
@@ -39,4 +45,4 @@ class BinMan:
 				
 				
 if __name__ == "__main__":
-	BinMan ()
+	BinMan (".")
