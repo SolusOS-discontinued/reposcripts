@@ -60,18 +60,43 @@ class BinMan:
                        skip_sources=True,
                        skip_signing=True,
                        compression=self.index_compression)
-                       		
+
+
+def print_help (commands):
+		print "Commands:"
+		longest_name = 0
+		offset = "\t"
+ 		for cmd in commands:
+			# First loop, determine the longest name
+			if len(cmd) > longest_name:
+				longest_name = len(cmd)
+				
+		# Alphabetically sort the command list
+		keyset = commands.keys()
+		keyset.sort ()		
+		for cmd in keyset:
+			spaces = ""
+			if len(cmd) < longest_name:
+				# If this isn't the longest name, add spaces until they line up
+				spaces = (longest_name - len(cmd)) * " "		
+			print "%s%s%s - %s" % (offset, spaces, cmd, commands[cmd][0])
+				                       		
 if __name__ == "__main__":
 	if not os.path.exists ("repo.conf"):
 		print "Please use from a valid repository"
 		sys.exit (1)
 		
 	repo = BinMan ("repo.conf")
+	
+	Commands = { 'index' : ( 'index the repository', repo.index ), \
+				 'process': ('process the incoming queue', repo.process_incoming) }
+
 	# Check the command
 	if len(sys.argv) < 2:
-		print "Please specify a command"
+		print "%s - repository management\n" % sys.argv[0]
+		print_help (Commands)
 		sys.exit (1)
-	
+		
 	keyword = sys.argv[1]
 	if keyword == "process":
 		repo.process_incoming ()
