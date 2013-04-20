@@ -53,7 +53,7 @@ class BinMan:
 				os.makedirs (path)
 			shutil.move (item, path)
 				
-	def index (self, inputs, outputDir):
+	def index (self, inputs=["."], outputDir="."):
 		''' Pisi index '''
 		pisi.api.index(inputs,
                        output=os.path.join(outputDir, "pisi-index.xml"),
@@ -98,10 +98,12 @@ if __name__ == "__main__":
 		sys.exit (1)
 		
 	keyword = sys.argv[1]
-	if keyword == "process":
-		repo.process_incoming ()
-	elif keyword == "index":
-		repo.index (["."], ".")
+	if keyword in Commands:
+		# Store a pointer to the function in the Commands list for the keyword
+		# and execute it, saves having a lot of if/else statements
+		command = Commands[keyword][1]
+		command ()
 	else:
-		print "Unknown command"
+		print "Unknown command: %s" % keyword
+ 		print_help (Commands)
 	
