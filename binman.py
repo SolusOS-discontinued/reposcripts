@@ -20,7 +20,8 @@ class BinMan:
 					
 		for potential in os.listdir (scanDir):
 			if potential.endswith (".pisi") and not potential.endswith (".delta.pisi"):
-				searchList.append (potential)
+				fPath = os.path.join (scanDir, potential)
+				searchList.append (fPath)
 				
 		total = len(searchList)
 		count = 0
@@ -65,7 +66,7 @@ if __name__ == "__main__":
 	if keyword == "process":
 		repo.process_incoming ("./incoming")
 	elif keyword == "index":
-		repo.index (["./incoming"], ".")
+		repo.index (["."], ".")
 	else:
 		print "Unknown command"
 	
