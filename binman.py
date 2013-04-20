@@ -7,14 +7,14 @@ import sys
 
 class BinMan:
 	
-	def __init__(self, scanDir):
-		searchList = list()
-		print "Scanning current working directory for .pisi files"
-		
+	def __init__(self, scanDir):	
 		if not os.path.exists (scanDir):
 			print "Directory not found: %s" % scanDir
 			sys.exit (1)
-			
+
+		searchList = list()
+		print "Scanning current working directory for .pisi files"
+					
 		for potential in os.listdir (scanDir):
 			if potential.endswith (".pisi") and not potential.endswith (".delta.pisi"):
 				searchList.append (potential)
