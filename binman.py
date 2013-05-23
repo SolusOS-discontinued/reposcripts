@@ -30,7 +30,7 @@ class BinMan:
         
     def _serve (self):
         self.server.serve_forever ()
-    
+
     def pending_count (self):
         count = 0
         for item in os.listdir (self.incoming_dir):
@@ -79,7 +79,8 @@ class BinMan:
             if not os.path.exists (path):
                 os.makedirs (path)
             shutil.move (item, path)
-				
+        return True
+                        
     def index (self, inputs=["."]):
         ''' Pisi index '''
         pisi.api.index(inputs,
@@ -87,9 +88,11 @@ class BinMan:
                        skip_sources=True,
                        skip_signing=True,
                        compression=self.index_compression)
-    
+        return True
+
     def produce_deltas (self):
         produce_deltas_for_directory (self.repo_dir)
+        return True
 		
 def print_help (commands):
 		print "Commands:"
