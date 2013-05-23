@@ -14,6 +14,7 @@ from SocketServer import ThreadingMixIn
 
 class AsyncXMLRPCServer(ThreadingMixIn,SimpleXMLRPCServer): pass
 
+from deltafise import produce_deltas_for_directory
 
 class BinMan:
     def __init__(self, configFile):
@@ -86,9 +87,9 @@ class BinMan:
                        skip_sources=True,
                        skip_signing=True,
                        compression=self.index_compression)
-                       
-    def _not_implemented (self):
-        print "Not yet implemented"
+    
+    def produce_deltas (self):
+        produce_deltas_for_directory (self.repo_dir)
 		
 def print_help (commands):
 		print "Commands:"
@@ -120,7 +121,7 @@ if __name__ == "__main__":
                  'process': ('process the incoming queue', repo.process_incoming), \
                  'help': ('display this help message', print_help),
                  'runserver': ('run the binman service', repo._serve), \
-                 'delta': ('create deltas for the repository', repo._not_implemented) }
+                 'delta': ('create deltas for the repository', repo.produce_deltas) }
 
     # Check the command
     if len(sys.argv) < 2:
