@@ -16,6 +16,15 @@ class AsyncXMLRPCServer(ThreadingMixIn,SimpleXMLRPCServer): pass
 
 from deltafise import produce_deltas_for_directory
 
+def redirect_io (stdin='/dev/null', stdout='/dev/null', stderr='/dev/null'):
+    stdin_ = open (stdin, "r")
+    stdout_ = open (stdout, "a+")
+    stderr_ = open (stderr, "a+")
+    
+    os.dup2 (stdin_.fileno(), sys.stdin.fileno())
+    os.dup2 (stdout_.fileno(), sys.stdout.fileno())
+    os.dup2 (stderr_.fileno(), sys.stderr.fileno())
+    
 class BinMan:
     def __init__(self, configFile):
         self.config = ConfigObj (configFile)
@@ -93,7 +102,33 @@ class BinMan:
     def produce_deltas (self):
         produce_deltas_for_directory (self.repo_dir)
         return True
-		
+
+    def serve_forked (self):
+        print "Running"
+        try:
+            pid = os.fork ()
+            if pid > 0: sys.exit(0) # Exit first parent.
+        except OSError, e:
+            print e
+            sys.exit (1)
+        
+        os.umask (0)
+        os.setsid ()
+        
+        # Fork again, daemonize
+        try:
+            pid = os.fork ()
+            if pid > 0:
+                print "SLAVE_PID=%d" % pid
+                sys.exit(0) # Exit second parent.
+        except OSError, e:
+            print e
+            sys.exit (1)
+            
+        # All setup to go
+        redirect_io ()
+        self._serve ()
+    		
 def print_help (commands):
 		print "Commands:"
 		longest_name = 0
@@ -112,7 +147,9 @@ def print_help (commands):
 				# If this isn't the longest name, add spaces until they line up
 				spaces = (longest_name - len(cmd)) * " "		
 			print "%s%s%s - %s" % (offset, spaces, cmd, commands[cmd][0])
-				                       		
+
+
+
 if __name__ == "__main__":
     if not os.path.exists ("repo.conf"):
         print "Please use from a valid repository"
@@ -123,7 +160,7 @@ if __name__ == "__main__":
     Commands = { 'index' : ( 'index the repository', repo.index ), \
                  'process': ('process the incoming queue', repo.process_incoming), \
                  'help': ('display this help message', print_help),
-                 'runserver': ('run the binman service', repo._serve), \
+                 'runserver': ('run the binman service', repo.serve_forked), \
                  'delta': ('create deltas for the repository', repo.produce_deltas) }
 
     # Check the command
